@@ -69,10 +69,8 @@ spec:
   - name: kafka
     image: everpeace/kafka
     env:
-    - name: ADVERTISED_HOST
-      value: "kafka-broker"
-    - name: ADVERTISED_PORT
-      value: "9092"
+    - name: ADVERTISED_LISTENERS
+      value: "PLAINTEXT://kafka-broker:9092"
     - name: ZK_CONNECT
       value: "zookeeper:2181"
     ports:

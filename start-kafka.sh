@@ -1,21 +1,16 @@
 #!/bin/sh
 
 # Optional ENV variables:
-# * ADVERTISED_HOST: the external ip for the container, e.g. `docker-machine ip \`docker-machine active\``
-# * ADVERTISED_PORT: the external port for Kafka, e.g. 9092
+# * ADVERTISED_LISTENERS: the listner address to be advertized to clients for the container, e.g. "PLAINTEXT://`docker-machine ip \`docker-machine active\``:9092"
 # * ZK_CONNECT: the zookeeper.connect value, e.g "zk1:2181,zk2:2181,zk3:2181/kafka"
 # * LOG_RETENTION_HOURS: the minimum age of a log file in hours to be eligible for deletion (default is 168, for 1 week)
 # * LOG_RETENTION_BYTES: configure the size at which segments are pruned from the log, (default is 1073741824, for 1GB)
 # * NUM_PARTITIONS: configure the default number of log partitions per topic
 
 # Configure advertised host/port
-if [ ! -z "$ADVERTISED_HOST" ]; then
-    echo "advertised host: $ADVERTISED_HOST"
-    sed -r -i "s/#(advertised.host.name)=(.*)/\1=$ADVERTISED_HOST/g" $KAFKA_HOME/config/server.properties
-fi
-if [ ! -z "$ADVERTISED_PORT" ]; then
-    echo "advertised port: $ADVERTISED_PORT"
-    sed -r -i "s/#(advertised.port)=(.*)/\1=$ADVERTISED_PORT/g" $KAFKA_HOME/config/server.properties
+if [ ! -z "$ADVERTISED_LISTENERS" ]; then
+    echo "advertised listeners: $ADVERTISED_LISTENERS"
+    sed -r -i "s/#(advertised.listeners)=(.*)/\1=$ADVERTISED_LISTENERS/g" $KAFKA_HOME/config/server.properties
 fi
 
 if [ ! -z "$ZK_CONNECT" ]; then
@@ -45,4 +40,6 @@ if [ ! -z "$AUTO_CREATE_TOPICS" ]; then
 fi
 
 # Run Kafka
+cat $KAFKA_HOME/config/server.properties
+
 $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
