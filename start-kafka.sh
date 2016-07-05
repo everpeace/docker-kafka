@@ -10,10 +10,12 @@
 # Configure advertised host/port
 if [ ! -z "$ADVERTISED_LISTENERS" ]; then
     echo "advertised listeners: $ADVERTISED_LISTENERS"
-    sed -r -i "s/#(advertised.listeners)=(.*)/\1=$ADVERTISED_LISTENERS/g" $KAFKA_HOME/config/server.properties
+    export ESCAPED_ADVERTISED_LISTENERS=$(echo $ADVERTISED_LISTENERS | sed 's/\//\\\//g');
+    sed -r -i "s/#(advertised.listeners)=(.*)/\1=$ESCAPED_ADVERTISED_LISTENERS/g" $KAFKA_HOME/config/server.properties
 fi
 
 if [ ! -z "$ZK_CONNECT" ]; then
+  echo "zookeeper.connect: $ZK_CONNECT"
   sed -r -i "s/zookeeper.connect=localhost:2181/zookeeper.connect=$ZK_CONNECT/g" $KAFKA_HOME/config/server.properties
 fi
 
