@@ -10,7 +10,7 @@ ENV KAFKA_HOME /opt/kafka_"$SCALA_VERSION"-"$KAFKA_VERSION"
 LABEL name="kafka" version="$SCALA_VERSION"-"$KAFKA_VERSION"
 
 RUN mkdir -p /opt \
-    && apk add --no-cache wget bash \
+    && apk add --no-cache wget bash sed \
     && wget -q -O - http://apache.mirrors.spacedump.net/kafka/$KAFKA_VERSION/kafka_$SCALA_VERSION-$KAFKA_VERSION.tgz | tar -xzf - -C /opt
 
 ADD start-kafka.sh /usr/bin/start-kafka.sh
